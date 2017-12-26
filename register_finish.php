@@ -29,7 +29,7 @@ elseif($id != null && $pw != null && $pw2 != null && $pw == $pw2)
 {
         //新增資料進資料庫語法
 	mysql_query("set names 'utf8'");
-	$sql = "insert into b22_21301895_food.user(userID,userAccount,userPassWord,userName)value('','$id','$pw','$nickname')";
+	$sql = "insert into b22_21301895_food.user(userID,userAccount,userPassWord,userName,userLV)value('','$id','$pw','$nickname',0)";
 	if(mysql_query($sql))
 	{
 			echo '註冊成功! 3秒後返回首頁!';

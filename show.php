@@ -57,24 +57,27 @@
 						<h2>文章列表</h2>
 							<table id="customers" >
 							<tr align="center">
-									<th width="5%"> 分類 </th><th width="45%"> 標題 </th><th width="10%"> 作者 </th><th width="20%"> 發文日期 </th>
+									<th width="10%">推文數</th><th width="5%"> 分類 </th><th width="40%"> 標題 </th><th width="10%"> 作者 </th><th width="15%"> 發文日期 </th>
 							</tr>
              		  	  <?php
 							for($i=1;$i<=mysql_num_rows($result);$i++){
 							 $rs=mysql_fetch_assoc($result);
-							 if($rs['writingType']==1){
-								 $type = '募款';
+							 $id = $rs['writingID'];
+							 $reply1=mysql_query("select * from b22_21301895_food.reply where replyWritingID = '$id' AND replyRecommend = '推'");
+							 $reply2=mysql_query("select * from b22_21301895_food.reply where replyWritingID = '$id' AND replyRecommend = '噓'");
+							 $sum = mysql_num_rows($reply1)-mysql_num_rows($reply2);
+							 echo '<tr align="center" >';
+							 if($sum>10){
+								 echo '<td width="10%" style="text-align:center; color:red;">爆';
 							 }
-							 elseif($rs['writingType']==2){
-								 $type = '募物';
+							 elseif($sum<0){
+								 echo '<td width="10%" style="text-align:center; color:gray;">廢';
 							 }
-							 elseif($rs['writingType']==3){
-								 $type = '募人';
+							 else{
+								 echo '<td width="10%" style="text-align:center; color:black;">'.$sum;
 							 }
 							?>
-								
-								<tr align="center" >
-								  <td width="5%"> <?php echo $type?> </td><td width="45%"><a href="content.php?id=<?php echo $rs['writingID'] ?>"><?php echo $rs['writingSubject']?></a> </td><td width="10%"> <?php echo $rs['writingName']?> </td><td width="20%"> <?php echo $rs['writingTime']?> </td>
+								 </td><td width="5%"> <?php echo $rs['writingType']?> </td><td width="40%"><a href="content.php?id=<?php echo $rs['writingID'] ?>"><?php echo $rs['writingSubject']?></a> </td><td width="10%"> <?php echo $rs['writingName']?> </td><td width="15%"> <?php echo $rs['writingTime']?> </td>
 								</tr>
 							<?php } ?>
 							</table>

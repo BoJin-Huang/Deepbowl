@@ -13,7 +13,8 @@ $writingType=$_GET['writingType'];
 $writingSubject=$_GET['writingSubject'];
 $writingContent=$_GET['writingContent'];
 $writingContact=$_GET['writingContact'];
-$writingTime = date("Y:m:d H:i:s",time()+28800);
+date_default_timezone_set("Asia/Taipei");
+$writingTime = date("Y:m:d H:i:s",time());
 
 if(isset($writingSubject)){
 mysql_query("set names 'utf8'");
@@ -40,18 +41,22 @@ header("location:show.php");
                        		 <form id="form1" name="form1" method="get">
                          	 <p style="font-size:18px">分類:
                                  <select name="writingType" id="writingType">
-                                    <option value="1" selected="selected">募款</option>
-                                    <option value="2">募物</option>
-                                    <option value="3">募人</option>
+                                    <option value="小吃" selected="selected">小吃</option>
+                                    <option value="炸物">炸物</option>
+                                    <option value="炭烤">炭烤</option>
+									<option value="飲料">飲料</option>
+									<option value="甜點">甜點</option>
+									<option value="冰品">冰品</option>
+									<option value="其他">其他</option>
                                  </select>
-                                主旨:
+                                標題:
                                  <input name="writingSubject" type="text" id="writingSubject" size="25" />
                           	 </p>
-                          <h2>活動詳情</h2>
+                          <h2>介紹內容</h2>
                           <p>
                  			 <textarea name="writingContent" id="writingContent" cols="80" rows="10"></textarea>
                           </p>
-                          <p style="font-size:18px">聯絡方式:
+                          <p style="font-size:18px">營業資訊:
                             <input name="writingContact" type="text" id="writingContact" size="50" />
                           </p>
                           <p>

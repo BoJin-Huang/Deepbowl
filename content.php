@@ -10,9 +10,11 @@ $reply=mysql_query("select * from b22_21301895_food.reply where replyWritingID =
 $replyUserName=$_SESSION['username'];
 $replyWritingID=$id;
 $replyContent=$_POST['replyContent'];
-$replyTime = date("Y:m:d H:i:s",time()+28800);
+$replyRecommend=$_POST['replyRecommend'];
+date_default_timezone_set("Asia/Taipei");
+$replyTime = date("Y:m:d H:i:s",time());
 if(isset($replyContent)){
-	$sql = "insert into b22_21301895_food.reply(replyUserName,replyWritingID,replyTime,replyContent)value('$replyUserName','$replyWritingID','$replyTime','$replyContent')";
+	$sql = "insert into b22_21301895_food.reply(replyUserName,replyWritingID,replyTime,replyContent,replyRecommend)value('$replyUserName','$replyWritingID','$replyTime','$replyContent','$replyRecommend')";
 	mysql_query($sql) or die(mysql_error());
 	echo "<script language=JavaScript> location.replace(location.href);</script>";
 }
@@ -109,47 +111,45 @@ if(isset($replyContent)){
 						<?php
 							for($i=1;$i<=mysql_num_rows($data);$i++){
 							 $rs=mysql_fetch_assoc($data);
-							 if($rs['writingType']==1){
-								 $type = '募款';
-							 }
-							 elseif($rs['writingType']==2){
-								 $type = '募物';
-							 }
-							 elseif($rs['writingType']==3){
-								 $type = '募人';
-							 }
 							}
 						?>
 						<div class="CSSTableGenerator">
 							<table align="center">
 								<tr>
-								  <td><?php echo $rs['writingSubject']?></td>
+								  <td colspan="4"><?php echo $rs['writingSubject']?></td>
 								</tr>
 								<tr>
-								  <td width="15%">暱稱</td>
-								  <td width="85%" colspan="2"><?php echo $rs['writingName']?></td>
+								  <td width="20%" colspan="2" style="text-align:center">發文者</td>
+								  <td width="80%" colspan="2"><?php echo $rs['writingName']?></td>
 								</tr>
 								<tr>
-								  <td>聯絡方式</td>
+								  <td colspan="2" style="text-align:center">營業資訊</td>
 								  <td colspan="2"><?php echo $rs['writingContact']?></td>
 								</tr>
 								<tr>
-								  <td>分類</td>
-								  <td colspan="2"><?php echo $type?></td>
+								  <td colspan="2" style="text-align:center">分類</td>
+								  <td colspan="2"><?php echo $rs['writingType']?></td>
 								</tr>
 								<tr>
-								  <td>文章內容</td>
+								  <td colspan="2" style="text-align:center">介紹內容</td>
 								  <td colspan="2"><?php echo $rs['writingContent']?></td>
 								</tr>
 								<tr>
-								  <td colspan="3"  style='text-align: center;'>留言</td>
+								  <td colspan="4"  style="text-align:center">留言</td>
 								</tr>
 								<?php 
 									for($i=1;$i<=mysql_num_rows($reply);$i++){
 										$reply_rs=mysql_fetch_assoc($reply);
+										if($reply_rs['replyRecommend'] == '推'){
+											echo '<tr>
+								  <td width="5%" style="text-align:center; color:green;">';
+										}
+										else{
+											echo '<tr>
+								  <td width="5%" style="text-align:center; color:red;">';
+										}
 								?>
-								<tr>
-								  <td><?php echo $reply_rs['replyUserName']?>:</td> <td width="50%"><?php echo $reply_rs['replyContent']?></td> <td width="25%"><?php echo $reply_rs['replyTime']?></td>
+								<strong><?php echo $reply_rs['replyRecommend']?></strong></td><td width="15%" style="text-align:right"><?php echo $reply_rs['replyUserName']?>:</td> <td width="50%"><?php echo $reply_rs['replyContent']?></td> <td width="25%"><?php echo $reply_rs['replyTime']?></td>
 								</tr>
 								<?php } ?>
 							</table>
@@ -159,7 +159,10 @@ if(isset($replyContent)){
 								if($_SESSION['username'] != null){
 									echo '<form id="form" name="form" method="post">';
 									echo '<p><textarea name="replyContent" id="replyContent" cols="60" rows="5" placeholder="留言內容...."></textarea></p>';
-									echo '<p><input type="submit" name="button" id="button" value="留言" /></p>';
+									echo '<p><select name="replyRecommend" id="replyRecommend">
+                                    <option value="推" selected="selected">推文</option>
+                                    <option value="噓">噓文</option>
+									</select>&nbsp;&nbsp;<input type="submit" name="button" id="button" value="留言" /></p>';
 									echo '</form>';
 								}
 								else{
